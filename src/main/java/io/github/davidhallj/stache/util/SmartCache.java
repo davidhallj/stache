@@ -13,11 +13,11 @@ import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 
 @Slf4j
-public class StacheCache {
+public class SmartCache {
 
     private final Path cacheRoot;
 
-    public StacheCache(StacheConfiguration config, Class<?> cls) {
+    public SmartCache(StacheConfiguration config, Class<?> cls) {
         this.cacheRoot = resolveCachePath(config, cls, config.getTestContext().getTestMethodName());
     }
 
@@ -27,7 +27,7 @@ public class StacheCache {
 
         final Path cacheFilePath = cacheRoot.resolve(fileName);
 
-        log.info("Write cache file: {}", cacheFilePath);
+        log.debug("Write cache file: {}", cacheFilePath);
 
         Files.writeString(
                 cacheFilePath,
@@ -41,7 +41,7 @@ public class StacheCache {
     public String readCacheFile(String fileName) throws IOException {
         Path cacheFilePath = cacheRoot.resolve(fileName);
 
-        log.info("Read cache file: {}", cacheFilePath);
+        log.debug("Read cache file: {}", cacheFilePath);
 
         try {
 
@@ -62,7 +62,7 @@ public class StacheCache {
 
     private void createCacheDirIfEmpty() {
         if (!Files.exists(cacheRoot)) {
-            log.info("Cache does not exist. Creating cache directory");
+            log.debug("Cache does not exist. Creating cache directory");
             if (!cacheRoot.toFile().mkdirs()) {
                 throw new StacheException("Error creating cache directory");
             }

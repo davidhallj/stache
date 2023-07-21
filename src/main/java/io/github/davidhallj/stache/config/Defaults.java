@@ -14,7 +14,7 @@ public final class Defaults {
     // value on the @Advanced annotation.. need a solution for this
     public static final String MAVEN_TEST_RESOURCES = "src/test/resources"; // assumes maven
     //public static final Path MAVEN_TEST_RESOURCES  = Path.of("src", "test", "resources"); // assumes maven
-    public static final String CACHE_DIR  = "cache";
+    public static final String CACHE_DIR  = "stache";
     public static final CacheNamingStrategy CACHE_NAMING_STRATEGY = CacheNamingStrategy.METHOD_SCOPED;
 
 }

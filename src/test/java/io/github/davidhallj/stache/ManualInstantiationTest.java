@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
-public class JaxrsStacheTest {
+public class ManualInstantiationTest {
 
     private static final String TEST_CACHE_DIR = "stache-test-cache";
     private static final String READONLY_CACHE_DIR = "readonly-test-cache";
@@ -54,22 +54,20 @@ public class JaxrsStacheTest {
         final Path expectedCacheDirectory = Paths.get(Defaults.MAVEN_TEST_RESOURCES, TEST_CACHE_DIR, testMethodName);
         assertThat(Files.exists(expectedCacheDirectory)).isFalse();
 
-        StacheRunConfiguration config = StacheRunConfiguration.builder()
-                .runStrategy(RunStrategy.SMART_CACHE_MODE)
-                .testResourceDir(Defaults.MAVEN_TEST_RESOURCES)
-                .cacheDir(TEST_CACHE_DIR)
-                .cacheNamingStrategy(Defaults.CACHE_NAMING_STRATEGY)
-                .build();
-
         StacheConfiguration stacheConfiguration = StacheConfiguration.builder()
-                .runConfig(config)
+                .runConfig(StacheRunConfiguration.builder()
+                        .runStrategy(RunStrategy.SMART_CACHE_MODE)
+                        .testResourceDir(Defaults.MAVEN_TEST_RESOURCES)
+                        .cacheDir(TEST_CACHE_DIR)
+                        .cacheNamingStrategy(Defaults.CACHE_NAMING_STRATEGY)
+                        .build())
                 .testContext(StacheTestContext.builder()
                         .testMethodName(testMethodName)
                         .build())
                 .build();
 
         // Real client -> no proxy interceptor
-        final HelloResource helloResourceLiveClient = (HelloResource) config.getJaxrsFactory().createJaxrsProxy(HelloResource.url, HelloResource.class);
+        final HelloResource helloResourceLiveClient = (HelloResource) stacheConfiguration.getRunConfig().getJaxrsFactory().createJaxrsProxy(HelloResource.url, HelloResource.class);
 
         final CachingProxyFactory cachingProxyFactory = new CachingProxyFactory(stacheConfiguration);
         // Wrapped with a proxy interceptor for caching

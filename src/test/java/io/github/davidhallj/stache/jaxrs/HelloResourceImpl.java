@@ -1,17 +1,15 @@
 package io.github.davidhallj.stache.jaxrs;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ServerErrorException;
 
 @Slf4j
+@NoArgsConstructor
 public final class HelloResourceImpl implements HelloResource {
-
-    public HelloResourceImpl() {
-        log.info("HelloResourceImpl constructor");
-    }
 
     @Getter
     private int counter = 0;

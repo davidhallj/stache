@@ -32,7 +32,7 @@ public class StacheAnnotationsProcessor {
 
                     final StacheConfiguration config = StacheConfiguration.create(jaxrsStacheAnnotation.runConfig(), jaxrsStacheAnnotation.advanced(), junitTestMethodName);
 
-                    final Object jaxrsClient = config.getRunConfig().getJaxrsFactory().createJaxrsProxy(uri, clazz);
+                    final Object jaxrsClient = config.getRunConfig().getJaxrsFactory().createJaxrsProxy(uri, field.getType());
 
                     Object cachingProxy = buildCachingProxy(
                             config,

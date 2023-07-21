@@ -4,7 +4,7 @@ import io.github.davidhallj.stache.config.StacheConfiguration;
 import io.github.davidhallj.stache.config.StacheRunConfiguration;
 import io.github.davidhallj.stache.exception.StacheException;
 import io.github.davidhallj.stache.exceptionmapping.ExceptionResolver;
-import io.github.davidhallj.stache.util.StacheCache;
+import io.github.davidhallj.stache.util.SmartCache;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +23,7 @@ public class CachingInvocationHandler implements InvocationHandler {
 
     private final Object realServiceImpl;
     private final StacheConfiguration stacheConfiguration;
-    private final StacheCache stacheCache;
+    private final SmartCache smartCache;
     private final Gson gson;
 
     private int hits = 0;
@@ -31,7 +31,7 @@ public class CachingInvocationHandler implements InvocationHandler {
     public CachingInvocationHandler(StacheConfiguration stacheConfiguration, Object realServiceImpl, Class<?> cls) {
         this.realServiceImpl = realServiceImpl;
         this.stacheConfiguration = stacheConfiguration;
-        this.stacheCache = new StacheCache(stacheConfiguration, cls);
+        this.smartCache = new SmartCache(stacheConfiguration, cls);
         this.gson = stacheConfiguration.getRunConfig().getGson();
     }
 
@@ -61,9 +61,9 @@ public class CachingInvocationHandler implements InvocationHandler {
             case SMART_CACHE_MODE -> {
                 log.debug("SMART_CACHE_MODE");
 
-                if (stacheCache.cacheFileExists(cacheFileName)) {
+                if (smartCache.cacheFileExists(cacheFileName)) {
 
-                    result = stacheCache.readCacheFile(cacheFileName);
+                    result = smartCache.readCacheFile(cacheFileName);
 
                     if (result == null) {
                         log.debug("An empty cache file was found");
@@ -82,11 +82,11 @@ public class CachingInvocationHandler implements InvocationHandler {
                         result = m.invoke(realServiceImpl, args);
                     } catch (InvocationTargetException e) {
 
-                        stacheCache.writeCacheFile(cacheFileName, exceptionResolver.buildExceptionChain(e.getTargetException()));
+                        smartCache.writeCacheFile(cacheFileName, exceptionResolver.buildExceptionChain(e.getTargetException()));
                         throw e.getTargetException();
                     }
 
-                    stacheCache.writeCacheFile(cacheFileName, result == null ? "" : gson.toJson(result));
+                    smartCache.writeCacheFile(cacheFileName, result == null ? "" : gson.toJson(result));
 
                     return result;
                 }
@@ -94,7 +94,7 @@ public class CachingInvocationHandler implements InvocationHandler {
             }
             case READ_ONLY_MODE -> {
                 log.debug("READ_ONLY_MODE");
-                result = stacheCache.readCacheFile(cacheFileName);
+                result = smartCache.readCacheFile(cacheFileName);
 
                 if (result == null) {
                     throw new StacheException(String.format("Running in READ_ONLY mode but the matching cache file [%s] is not found", cacheFileName));

@@ -57,7 +57,7 @@ public class SmartCacheModeAnnotationTest {
     }
 
     @Test
-    void run() {
+    void smartCacheMode() {
         final Greeting greeting1 = helloResourceSmartCacheMode.greet();
         final Greeting greeting2 = helloResourceSmartCacheMode.greet();
         final Greeting greeting3 = helloResourceSmartCacheMode.greet();

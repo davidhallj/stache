@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @ExtendWith(StacheJunitExtension.class)
-public class CacheAnnotationTest {
+public class StacheAnnotationTest {
 
     private static final Path CACHE_ROOT = Path.of(Defaults.MAVEN_TEST_RESOURCES, Defaults.CACHE_DIR);
 
