@@ -10,6 +10,10 @@
 
     <packaging>jar</packaging>
 
+    <name>Stache</name>
+    <description>A web service testing library to automatically create smart Stubs that are backed by a Cache</description>
+    <url>https://github.com/davidhallj/stache</url>
+
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -22,8 +26,24 @@
     </distributionManagement>
 
     <scm>
+        <connection>scm:git:https://github.com/davidhallj/stache.git</connection>
         <developerConnection>scm:git:https://github.com/davidhallj/stache.git</developerConnection>
+        <url>https://github.com/davidhallj/stache</url>
     </scm>
+
+    <developers>
+        <developer>
+            <name>David Hall</name>
+            <email>david.hall.j@gmail.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
     <build>
         <plugins>
