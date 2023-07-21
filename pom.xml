@@ -21,6 +21,10 @@
         </repository>
     </distributionManagement>
 
+    <scm>
+        <developerConnection>scm:git:https://github.com/davidhallj/stache.git</developerConnection>
+    </scm>
+
     <build>
         <plugins>
             <plugin>
